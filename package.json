@@ -12,11 +12,12 @@
   "scripts": {
     "preinstall": "npx only-allow pnpm",
     "in": "pnpm i -r",
+    "dev": "pnpm -F @moten/editor dev",
     "ui-dev": "pnpm -F @moten/ui dev",
     "ui-build": "pnpm -F @moten/ui build",
     "clear": "rimraf --glob ./node_modules ./packages/**/node_modules ./packages/**/dist",
     "play:vue3": "pnpm -F @moten/ui build && pnpm -F @moten/playground-vue3 dev",
-    "play:vue2": "pnpm -F @moten/ui build && pnpm -F @moten/playground-vue3 dev",
+    "play:vue2": "pnpm -F @moten/ui build && pnpm -F @moten/playground-vue2 dev",
     "prepare": "husky",
     "lint": "node scripts/lint.js"
   },
@@ -34,12 +35,12 @@
   "pnpm": {
     "packageExtensions": {
       "vue-template-compiler": {
-        "devDependencies": {
+        "peerDependencies": {
           "vue": "^2.7.16"
         }
       },
       "vue-template-compiler@2.7.16": {
-        "devDependencies": {
+        "peerDependencies": {
           "vue": "^2.7.16"
         }
       }

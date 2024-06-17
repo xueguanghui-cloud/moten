@@ -1,0 +1,50 @@
+/*
+* 注意：为什么移动端的容器查询是分开写，而pc端的是放在一起的？
+* 因为移动端是需要区分媒体查询和容器查询的，根据不同赋予不同的单位；而pc端是不需要区分的，所以放在一起。
+**/
+
+// mobile
+@mixin mb {
+  @media (max-width: 1023.9px) {
+    @content;
+  }
+}
+
+// mobile container-type
+@mixin mb-ct {
+  @container (max-width: 1023.9px) {
+    @content;
+  }
+}
+
+// pc
+@mixin pc {
+  @media (min-width: 1024px) {
+    @content;
+  }
+  // pc container-type
+  @container (min-width: 1024px) {
+    @content;
+  }
+}
+
+@mixin res($property, $mobile: null, $pc: null) {
+  $pcValue: if(unitless($pc), #{$pc}px, $pc); // 判断传入参数是否携带单位，没有则加上 px
+  $mobileValue: if(unitless($mobile), vw($mobile), $mobile);
+  $mobileContainerValue: if(unitless($mobile), #{$mobile}px, $mobile); // 针对移动端容器查询
+
+  @if (exists($pc)) {
+    @include pc {
+      #{$property}: $pcValue;
+    }
+  }
+
+  @if (exists($mobile)) {
+    @include mb-ct {
+      #{$property}: $mobileContainerValue;
+    }
+    @include mb {
+      #{$property}: $mobileValue;
+    }
+  }
+}
