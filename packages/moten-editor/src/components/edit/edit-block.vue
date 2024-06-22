@@ -18,23 +18,18 @@
     <div class="right">
       <el-collapse v-model="activeNames">
         <el-collapse-item title="基础组件" name="1">
-          <div>
-            Consistent with real life: in line with the process and logic of real life, and comply
-            with languages and habits that the users are used to;
-          </div>
-          <div>
-            Consistent within interface: all elements should be consistent, such as: design style,
-            icons and texts, position of elements, etc.
-          </div>
+          <edit-block-drag
+            :list="baseBlockList"
+            :sort="false"
+            :group="{ name: dragGroup, pull: 'clone', put: false }"
+          />
         </el-collapse-item>
         <el-collapse-item title="高级组件" name="2">
-          <div>
-            Operation feedback: enable the users to clearly perceive their operations by style
-            updates and interactive effects;
-          </div>
-          <div>
-            Visual feedback: reflect current state by updating or rearranging elements of the page.
-          </div>
+          <edit-block-drag
+            :list="seniorBlockList"
+            :sort="false"
+            :group="{ name: dragGroup, pull: 'clone', put: false }"
+          />
         </el-collapse-item>
       </el-collapse>
     </div>
@@ -43,8 +38,9 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import { dragGroup } from './nested'
+import { baseBlocks, seniorBlocks } from '@/config/block'
 
-const activeMenu = ref(0)
 const menuList = ref([
   {
     icon: 'block',
@@ -57,10 +53,11 @@ const menuList = ref([
     name: '套件',
   },
 ])
-
+const activeMenu = ref(0)
 const activeNames = ref(['1', '2'])
-// const baseBlockList = ref([])
-// const seninrBlockList = ref([])
+
+const baseBlockList = ref(baseBlocks)
+const seniorBlockList = ref(seniorBlocks)
 </script>
 
 <style scoped lang="scss">
