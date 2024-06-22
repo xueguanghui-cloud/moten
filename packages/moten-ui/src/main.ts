@@ -1,6 +1,8 @@
-import "./style.css";
+// import './style.css'
+import "@/assets/style/index.scss";
+import { App } from "vue-demi";
 
-import MoImage from "./components/mo-image.vue";
+import MoImage from "@/components/image";
 
 import imageSchema from "./components/image/schema";
 import { schemaAllViewport as _schemaAllViewport } from "./utils/components";
@@ -9,8 +11,15 @@ export const schema = {
   image: imageSchema,
 };
 
-export const schemaAllViewport = _schemaAllViewport;
+const components = [MoImage];
 
-export default {
-  MoImage,
+const install = (app: App) => {
+  components.forEach((component) => {
+    const { name } = component;
+    if (name) app.component(name, component);
+  });
 };
+
+export default { install, MoImage };
+
+export const schemaAllViewport = _schemaAllViewport;

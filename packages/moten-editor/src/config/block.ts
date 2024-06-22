@@ -7,7 +7,7 @@ export const baseBlocks: BaseBlock[] = [
   {
     id: '',
     name: '图片',
-    code: 'image',
+    code: 'mo-image',
     icon: 'image',
     formData: {},
   },

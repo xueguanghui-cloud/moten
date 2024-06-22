@@ -8,9 +8,11 @@ import router from './router'
 import { Icon } from '@iconify/vue'
 
 import Draggable from 'vuedraggable'
+import moten from '@moten/ui'
 
 const app = createApp(App)
 
+app.use(moten)
 app.use(createPinia())
 app.use(router)
 
