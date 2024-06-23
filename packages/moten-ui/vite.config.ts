@@ -1,3 +1,5 @@
+/// <reference types="vitest" />
+
 import { fileURLToPath, URL } from "node:url";
 import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
@@ -33,6 +35,21 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": fileURLToPath(new URL("./src", import.meta.url)),
+    },
+  },
+  css: {
+    preprocessorOptions: {
+      // 配置 mixin.scss 混合文件的全局引入
+      scss: {
+        additionalData: `@import "@//assets/style/resources.scss";`,
+      },
+    },
+  },
+  test: {
+    environment: 'jsdom',
+    coverage: {
+      include: ['src/components/**/*'],
+      exclude: ['src/**/schema.ts'],
     },
   },
 });

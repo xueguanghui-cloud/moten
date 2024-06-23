@@ -13,6 +13,31 @@
     <template #item="{ element }">
       <div class="element">
         <div
+          v-if="element.nested && level < 2"
+          class="block-nested-render"
+          :class="activeClass(element)"
+          @click.stop="edit.setCurrentSelect(element)"
+        >
+          <component
+            :key="element.id"
+            :is="renderComponentCode(element)"
+            :data="element.formData"
+            :children="element.children"
+            :viewport="edit.viewport"
+          >
+            <template #default="{ item }">
+              <edit-render-drag
+                :list="item"
+                :level="level + 1"
+                :group="group"
+                class="nested-item"
+                :class="nestedClass"
+              ></edit-render-drag>
+            </template>
+          </component>
+        </div>
+        <div
+          v-else
           class="block-render"
           :class="activeClass(element)"
           @click.stop="edit.setCurrentSelect(element)"
@@ -31,7 +56,8 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useEditStore } from '@/stores/edit'
-import { move } from './nested'
+import { move, nestedClass } from './nested'
+import { COMPONENT_PREFIX } from '@/config'
 
 const edit = useEditStore()
 
@@ -61,7 +87,7 @@ defineProps({
 
 const renderComponentCode = computed(() => {
   return (element: { code: string }) => {
-    return element.code
+    return COMPONENT_PREFIX + '-' + element.code
   }
 })
 const activeClass = computed(() => {
@@ -118,3 +144,4 @@ const activeClass = computed(() => {
   }
 }
 </style>
+, nestedClass

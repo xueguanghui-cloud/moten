@@ -45,6 +45,11 @@
         "peerDependencies": {
           "vue": "^2.7.16"
         }
+      },
+      "@vue/test-utils": {
+        "devDependencies": {
+          "vue": "^3.4.21"
+        }
       }
     }
   },

@@ -1,5 +1,11 @@
 import { App } from "vue-demi";
 import { TSchema, Type } from "@sinclair/typebox";
+
+/**
+ * schema加上视口
+ * @param params
+ * @returns
+ */
 export const schemaAllViewport = <T extends TSchema>(params: T) => {
   return Type.Object({
     desktop: params,
@@ -19,3 +25,23 @@ export function withInstall(component: any) {
   };
   return component;
 }
+
+/**
+ * 创建命名空间，包含组件名和公共class
+ * @param prefix 公共前缀
+ * @returns
+ */
+export function createNameSpaceFn(prefix: string) {
+  return (name: string) => {
+    const componentName = `${prefix}-${name}`;
+
+    const createBEM = (suffix?: string) => {
+      if(!suffix) return componentName;
+      return suffix.startsWith('--') ? `${componentName}${suffix}` : `${componentName}__${suffix}`
+    }
+
+    return {name:componentName, n: createBEM }
+  };
+}
+
+export const createNameSpace = createNameSpaceFn('mo')

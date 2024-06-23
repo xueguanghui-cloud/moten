@@ -1,47 +1,56 @@
 <script lang="ts">
-import { defineComponent } from "vue";
+import { props } from './props'
+import { defineComponent, computed, toRefs } from "vue";
+import { createNameSpace } from "@/utils/components"
+import MoLink from '../link'
+import MoEmpty from '../empty'
+
+const { name, n } = createNameSpace('image')
 
 export default defineComponent({
-  name: "MoImage",
-  props: {
-    src: {
-      type: String,
-      default: "",
-    },
+  name,
+  props,
+  components: {
+    MoLink,
+    MoEmpty
   },
-  emits: ["click"],
-  setup() {
+  setup(props) {
+    const { data, viewport } = toRefs(props)
+    const classes = computed(() => [n()])
+    const display = computed(() => {
+      const display = data.value?.display?.[viewport.value]
+      return typeof display === 'boolean' ? display : true
+    })
+    const src = computed(() => data.value?.src?.[viewport.value] || '')
+    const link = computed(() => data.value?.link?.[viewport.value] || '')
+    const width = computed(() => data.value?.width?.[viewport.value] || '')
+    const height = computed(() => data.value?.height?.[viewport.value] || '')
+    const styles = computed(() => ({ width: width.value, height: height.value }))
+
     return {
-      value: 1111,
-    };
-  },
-  mounted() {
-    console.warn(this.value);
+      classes,
+      styles,
+      display,
+      src,
+      link,
+      width,
+      height
+    }
   },
 });
 </script>
 
 <template>
-  <div class="" @click="$emit('click')">
-    <h1 class="title">Hello world!</h1>
-    <img :src="src" alt="" class="image" />
+  <div :class="classes">
+    <MoLink v-if="src" :to="link" target="_blank">
+      <img v-bind="$attrs" :src="src" class="image" :style="styles">
+    </MoLink>
+    <div v-else class="no-image">
+      <MoEmpty description="暂无图片，请上传" />
+    </div>
   </div>
 </template>
 
-<style scoped lang="scss">
-.image {
-  width: 300px;
-  height: 300px;
-}
-.title {
-  font-size: 50px;
-  color: #f00;
-}
-
-@container (max-width: 600px) {
-  .title {
-    font-size: 20px;
-    color: #00f;
-  }
-}
+<style lang="scss" scoped>
+@import './index.scss';
 </style>

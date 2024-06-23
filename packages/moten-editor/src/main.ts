@@ -1,4 +1,5 @@
 import './assets/styles/main.scss'
+import '@moten/ui/style'
 
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
