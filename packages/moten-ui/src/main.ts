@@ -17,11 +17,12 @@ export const schema = {
 
 const components = [MoImage, MoColumn];
 
-const install = (app: App) => {
+const install = (app: App, options: {platform: 'editor' | 'user'}) => {
   components.forEach((component) => {
     const { name } = component;
     if (name) app.component(name, component);
   });
+  app.provide('platform', options.platform) // 用于区分当前宿主环境（编辑器/用户）
 };
 
 export default { install, MoImage, MoColumn};

@@ -17,7 +17,18 @@
           class="block-nested-render"
           :class="activeClass(element)"
           @click.stop="edit.setCurrentSelect(element)"
+          @mouseenter="hoverId = element.id"
+          @mouseleave="hoverId = ''"
         >
+          <transition name="fade">
+            <edit-render-hover
+              v-show="hoverId === element.id"
+              :id="element.id"
+              :name="element.name"
+              @copy="copy"
+              @clear="clear"
+            />
+          </transition>
           <component
             :key="element.id"
             :is="renderComponentCode(element)"
@@ -41,7 +52,18 @@
           class="block-render"
           :class="activeClass(element)"
           @click.stop="edit.setCurrentSelect(element)"
+          @mouseenter="hoverId = element.id"
+          @mouseleave="hoverId = ''"
         >
+          <transition name="fade">
+            <edit-render-hover
+              v-show="hoverId === element.id"
+              :id="element.id"
+              :name="element.name"
+              @copy="copy"
+              @clear="clear"
+            />
+          </transition>
           <component
             :is="renderComponentCode(element)"
             :data="element.formData"
@@ -54,10 +76,11 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { ref, computed } from 'vue'
 import { useEditStore } from '@/stores/edit'
-import { move, nestedClass } from './nested'
+import { findNodeById, move, nestedClass, replaceNodeId } from './nested'
 import { COMPONENT_PREFIX } from '@/config'
+import type { BaseBlock } from '@/types/edit'
 
 const edit = useEditStore()
 
@@ -85,6 +108,8 @@ defineProps({
   },
 })
 
+const hoverId = ref('')
+
 const renderComponentCode = computed(() => {
   return (element: { code: string }) => {
     return COMPONENT_PREFIX + '-' + element.code
@@ -96,6 +121,26 @@ const activeClass = computed(() => {
     return { 'is-active': element.id === id }
   }
 })
+
+const handleNodeById = (arr: BaseBlock[], nodeId: string, type: 'copy' | 'clear') => {
+  return findNodeById(arr, nodeId, (params) => {
+    const { array, node, index } = params
+    if (type === 'copy') array.splice(index, 0, replaceNodeId(node))
+    if (type === 'clear') array.splice(index, 1)
+  })
+}
+const copy = (id: string) => {
+  if (!edit.blockConfig?.length) return
+  const newBlockConfig = handleNodeById(edit.blockConfig, id, 'copy')
+  edit.setCurrentSelect({})
+  edit.setBlockConfig(newBlockConfig)
+}
+const clear = (id: string) => {
+  if (!edit.blockConfig?.length) return
+  const newBlockConfig = handleNodeById(edit.blockConfig, id, 'clear')
+  edit.setCurrentSelect({})
+  edit.setBlockConfig(newBlockConfig)
+}
 </script>
 
 <style lang="scss" scoped>
@@ -144,4 +189,3 @@ const activeClass = computed(() => {
   }
 }
 </style>
-, nestedClass

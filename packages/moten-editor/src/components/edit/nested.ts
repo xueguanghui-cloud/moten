@@ -1,6 +1,7 @@
-import type { BaseBlock } from '@/types/edit'
+import type { BaseBlock, Viewport } from '@/types/edit'
 import { nanoid } from '@/utils/index'
 import { cloneDeep, isEqual } from 'lodash'
+import deepmerge from 'deepmerge'
 
 /**
  * column嵌套class
@@ -75,7 +76,7 @@ export const findNodeById = (
   const array = cloneDeep(arr)
 
   for (let i = 0; i < array.length; i++) {
-    const element = array[i] as any
+    const element = array[i]
     if (element.id === nodeId) {
       // 如果找到了匹配的节点，直接回调返回
       callback({
@@ -87,7 +88,7 @@ export const findNodeById = (
     }
 
     if (element.children?.length) {
-      // 如果节点有子节点，则递归调用 findNodeById 函数
+      // 如果有子节点，则递归调用 findNodeById 函数
       for (let j = 0; j < element.children.length; j++) {
         const elementChildren = element.children[j]
         if (!elementChildren.length) continue

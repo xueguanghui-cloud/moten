@@ -1,6 +1,6 @@
 <script lang="ts">
 import { props } from './props'
-import { defineComponent, computed, toRefs } from "vue";
+import { defineComponent, computed, toRefs, inject } from "vue";
 import { createNameSpace } from "@/utils/components"
 import MoLink from '../link'
 import MoEmpty from '../empty'
@@ -15,6 +15,7 @@ export default defineComponent({
     MoEmpty
   },
   setup(props) {
+    const platform = inject('platform')
     const { data, viewport } = toRefs(props)
     const classes = computed(() => [n()])
     const display = computed(() => {
@@ -26,6 +27,13 @@ export default defineComponent({
     const width = computed(() => data.value?.width?.[viewport.value] || '')
     const height = computed(() => data.value?.height?.[viewport.value] || '')
     const styles = computed(() => ({ width: width.value, height: height.value }))
+    const displayStyle = computed(()=>{
+      if (platform === 'editor') {
+        return !display.value ? { opacity: 0.4, filter: 'brightness(0.7)' } : {}
+      } else {
+        return !display.value ? { display: 'none' } : {}
+      }
+    })
 
     return {
       classes,
@@ -34,14 +42,15 @@ export default defineComponent({
       src,
       link,
       width,
-      height
+      height,
+      displayStyle
     }
   },
 });
 </script>
 
 <template>
-  <div :class="classes">
+  <div :class="classes" :style="displayStyle">
     <MoLink v-if="src" :to="link" target="_blank">
       <img v-bind="$attrs" :src="src" class="image" :style="styles">
     </MoLink>
@@ -54,3 +63,4 @@ export default defineComponent({
 <style lang="scss" scoped>
 @import './index.scss';
 </style>
+

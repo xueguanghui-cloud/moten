@@ -1,4 +1,4 @@
-import type { BlockSchema, BlockSchemaKeys } from '@/config/schema'
+import type { BlockSchemaFormData } from '@/config/schema'
 
 export type Viewport = 'mobile' | 'desktop'
 
@@ -30,5 +30,5 @@ export interface BaseBlock {
   /**
    * 配置内容
    */
-  formData?: BlockSchema[BlockSchemaKeys] | Object
+  formData?: Partial<BlockSchemaFormData[keyof BlockSchemaFormData]>
 }

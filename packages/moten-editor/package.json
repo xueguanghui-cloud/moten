@@ -13,12 +13,13 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "@moten/ui": "workspace:~",
     "@sinclair/typebox": "^0.32.32",
+    "deepmerge": "^4.3.1",
     "element-plus": "^2.7.4",
     "pinia": "^2.1.7",
     "vue": "^3.4.21",
-    "vue-router": "^4.3.0",
-    "@moten/ui": "workspace:~"
+    "vue-router": "^4.3.0"
   },
   "devDependencies": {
     "@iconify/vue": "^4.1.2",

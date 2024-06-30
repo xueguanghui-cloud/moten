@@ -13,7 +13,7 @@ import moten from '@moten/ui'
 
 const app = createApp(App)
 
-app.use(moten)
+app.use<{ platform: 'editor' | 'user' }>(moten, { platform: 'editor' })
 app.use(createPinia())
 app.use(router)
 

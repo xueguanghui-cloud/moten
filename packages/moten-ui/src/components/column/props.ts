@@ -1,4 +1,4 @@
-import { ComponentViewport } from '@/types/component'
+import { ComponentViewport } from '@/types/components'
 import { PropType } from 'vue-demi'
 
 export type MoColumnPropsData = {
