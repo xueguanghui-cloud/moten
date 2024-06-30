@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { ref, toRefs, watch } from 'vue'
+import { useFormItem } from 'element-plus'
 
+const { formItem } = useFormItem()
 const props = defineProps({
   data: {
     type: Object,
@@ -29,26 +31,31 @@ watch(
   },
 )
 
-watch(src, (value) => {
-  let data = {}
-  const _value = value || ''
+watch(
+  src,
+  (value) => {
+    // formItem?.validate('change').catch((err) => console.log(err))
+    let data = {}
+    const _value = value || ''
 
-  if (Object.values(formData || {}).length < 2) {
-    data = { desktop: _value, mobile: _value }
-  } else {
-    data = { [props.viewport]: _value }
-  }
+    if (Object.values(formData || {}).length < 2) {
+      data = { desktop: _value, mobile: _value }
+    } else {
+      data = { [props.viewport]: _value }
+    }
 
-  emit('callback', {
-    data: {
+    emit('callback', {
+      data: {
+        [key]: data,
+      },
+      id,
+    })
+    emit('update', {
       [key]: data,
-    },
-    id,
-  })
-  emit('update', {
-    [key]: data,
-  })
-})
+    })
+  },
+  { immediate: true },
+)
 
 const fileClick = () => {
   const list = [
@@ -64,7 +71,7 @@ const fileClick = () => {
 
 <template>
   <div class="config-files">
-    <el-form-item :label="title">
+    <el-form-item :label="title" :prop="key + '.' + viewport">
       <img v-if="src" :src="src" class="image" @click="fileClick" />
       <div v-else class="file" @click="fileClick">
         <v-icon icon="upload" class="icon" />

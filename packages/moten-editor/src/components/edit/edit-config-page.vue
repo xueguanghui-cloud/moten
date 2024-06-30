@@ -1,6 +1,6 @@
 <template>
   <div class="edit-config-page">
-    <edit-config-render :list="list" @callback="callback"> </edit-config-render>
+    <edit-config-render :list="list" :schema="schema" @callback="callback"> </edit-config-render>
   </div>
 </template>
 
@@ -12,7 +12,7 @@ import deepmerge from 'deepmerge'
 
 const edit = useEditStore()
 const list = ref<(typeof properties)[keyof typeof properties][]>([])
-
+const schema = ref(pageSchema)
 const properties = pageSchema.properties
 
 const listResult = Object.fromEntries(

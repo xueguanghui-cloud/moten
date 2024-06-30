@@ -29,30 +29,34 @@ watch(
   },
 )
 
-watch(input, (value) => {
-  let data = {}
-  const _value = value || ''
-  if (Object.values(formData || {}).length < 2) {
-    data = { desktop: _value, mobile: _value }
-  } else {
-    data = { [props.viewport]: _value }
-  }
+watch(
+  input,
+  (value) => {
+    let data = {}
+    const _value = value || ''
+    if (Object.values(formData || {}).length < 2) {
+      data = { desktop: _value, mobile: _value }
+    } else {
+      data = { [props.viewport]: _value }
+    }
 
-  emit('callback', {
-    data: {
+    emit('callback', {
+      data: {
+        [key]: data,
+      },
+      id,
+    })
+    emit('update', {
       [key]: data,
-    },
-    id,
-  })
-  emit('update', {
-    [key]: data,
-  })
-})
+    })
+  },
+  { immediate: true },
+)
 </script>
 
 <template>
   <div class="config-input">
-    <el-form-item :label="title">
+    <el-form-item :label="title" :prop="key + '.' + viewport">
       <el-input v-model="input" :placeholder="placeholder" class="input" />
     </el-form-item>
   </div>

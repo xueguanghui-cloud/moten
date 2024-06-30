@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { useEditStore } from '@/stores/edit'
 import { batchDynamicComponents } from '@/utils/index'
 const edit = useEditStore()
@@ -19,6 +19,45 @@ const props = defineProps({
 const ruleFormRef = ref()
 const form = ref<any>({})
 
+const update = (params: any) => {
+  const list = Object.entries(params || {})
+  list.forEach(([key, value]) => {
+    form.value[key] = value
+  })
+}
+
+const transfer = (b, key = 'default'): void => {
+  return Object.fromEntries(
+    Object.entries(b.properties).map((item: any) => {
+      const [keyP, valueP] = item
+      if (valueP.properties) return [keyP, transfer(valueP, key)]
+      return [keyP, valueP[key]]
+    }),
+  )
+}
+const rules = ref(transfer(props.schema, 'rules'))
+
+const submitForm = () => {
+  setTimeout(() => {
+    if (!ruleFormRef.value) return
+    ruleFormRef.value.validate((valid: any, fields: any) => {
+      // if (valid) {
+      //   console.warn('form submit!')
+      //   return
+      // }
+      // console.warn('form error !', fields)
+    })
+  }, 100)
+}
+
+submitForm()
+watch(
+  () => props.list,
+  () => {
+    submitForm()
+  },
+)
+
 const callback = (data: any) => {
   emit('callback', data)
 }
@@ -31,7 +70,7 @@ const getComponent = (item: any) => {
 
 <template>
   <div class="edit-config-render">
-    <el-form label-width="auto" ref="ruleFormRef">
+    <el-form label-width="auto" ref="ruleFormRef" :model="form" :rules="rules">
       <div v-for="(item, index) in list" :key="index">
         <component
           v-if="getComponent(item)"
@@ -39,6 +78,7 @@ const getComponent = (item: any) => {
           :data="item"
           :viewport="edit.viewport"
           @callback="callback"
+          @update="update"
         />
       </div>
     </el-form>
