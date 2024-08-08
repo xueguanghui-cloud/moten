@@ -42,7 +42,7 @@ class Response {
    * @param {*} messagge
    */
   static fail(message = "") {
-    return new Response(FAILED.code, FAILED.message + message);
+    return new Response(FAILED.code, FAILED.message + ": " + message);
   }
 
   /**
