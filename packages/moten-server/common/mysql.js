@@ -20,6 +20,7 @@ export const query = (sql, params) => {
         reject(err);
         return;
       }
+
       connection.execute(sql, params, (err, result) => {
         if (err) {
           reject(err);
