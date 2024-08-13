@@ -33,6 +33,8 @@ app.post("/rest/v1/page/delete", pageController.remove());
 // 用户
 app.post("/rest/v1/user/register", userController.register());
 app.post("/rest/v1/user/login", userController.login());
+app.get("/rest/v1/user", userController.findAll());
+app.post("/rest/v1/user/disable", userController.disable());
 
 app.use(authFailedHandler);
 app.use(errorHandler);
