@@ -1,7 +1,8 @@
-const SUCCESS = { code: 200, message: "success" };
-const FAILED = { code: 500, message: "fail" };
-const VALIDATE_FAILED = { code: 400, message: "param validate failed" };
-const API_NOT_FOUNT = { code: 404, message: "api does not exist" };
+const SUCCESS = { code: 200, message: "success" }; // 成功
+const FAILED = { code: 500, message: "fail" }; // 失败
+const VALIDATE_FAILED = { code: 400, message: "param validate failed" }; // 参数验证失败
+const AUTHORIZE_FAILED = { code: 401, message: "authorize failed" }; // 授权失败
+const API_NOT_FOUNT = { code: 404, message: "api does not exist" }; // api不存在
 
 class Response {
   /**
@@ -51,6 +52,14 @@ class Response {
    */
   static validateFailed(keys) {
     return new Response(VALIDATE_FAILED.code, VALIDATE_FAILED.message + `${keys ? ": " + keys : ""}`);
+  }
+
+  /**
+   * 授权失败
+   * @param {*} keys
+   */
+  static authorizeFailed() {
+    return new Response(AUTHORIZE_FAILED.code, AUTHORIZE_FAILED.message);
   }
 
   /**
