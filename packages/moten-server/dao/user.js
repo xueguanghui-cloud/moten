@@ -19,13 +19,13 @@ export class UserDao {
 
   async login(body) {
     const { username, password } = body;
-    const sql = `SELECT user_id, user_name, disable FROM user WHERE user_name = ? AND password = ?`;
+    const sql = `SELECT u.user_id, u.user_name, u.disable, u.create_time, r.role_id FROM user AS u JOIN role AS r ON u.role_id = r.role_id WHERE user_name = ? AND password = ?;`;
     const params = [username, password].map(String);
     const result = await daoErrorHandler(() => query(sql, params));
     return result;
   }
   async findAll(page = 1, size = 10) {
-    const sql = `SELECT user_id, user_name, disable, create_time FROM user ORDER BY user_id DESC LIMIT ?,?`;
+    const sql = `SELECT u.user_id, u.user_name, u.disable, u.create_time, r.role FROM user AS u JOIN role AS r ON u.role_id = r.role_id ORDER BY u.create_time DESC LIMIT ?, ?;`;
 
     const params = [(page - 1) * size, size].map(String);
     const result = await daoErrorHandler(() => query(sql, params));
