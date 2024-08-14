@@ -19,7 +19,7 @@ export class UserDao {
 
   async login(body) {
     const { username, password } = body;
-    const sql = `SELECT u.user_id, u.user_name, u.disable, u.create_time, r.role_id FROM user AS u JOIN role AS r ON u.role_id = r.role_id WHERE user_name = ? AND password = ?;`;
+    const sql = `SELECT user_id, user_name, disable, create_time, role_id FROM user WHERE user_name = ? AND password = ?;`;
     const params = [username, password].map(String);
     const result = await daoErrorHandler(() => query(sql, params));
     return result;
@@ -34,6 +34,13 @@ export class UserDao {
   async disable(id, disable = 1) {
     const sql = `UPDATE user SET disable = ? WHERE user_id = ?`;
     const params = [disable, id].map(String);
+    const result = await daoErrorHandler(() => query(sql, params));
+    return result;
+  }
+
+  async findOne(id) {
+    const sql = `SELECT user_id, user_name, disable, create_time, role_id FROM user WHERE user_id = ? LIMIT 1;`;
+    const params = [id].map(String);
     const result = await daoErrorHandler(() => query(sql, params));
     return result;
   }

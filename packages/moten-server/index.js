@@ -6,6 +6,7 @@ import { pageController, userController } from "./controller/index.js";
 import { error404Handler, errorHandler } from "./middleware/error.js";
 import { SECRET_KEY } from "./config/index.js";
 import { authFailedHandler } from "./middleware/auth.js";
+import { permissionHandler } from "./middleware/permission.js";
 
 const app = express();
 const port = 8081;
@@ -28,7 +29,7 @@ app.get("/rest/v1/page", pageController.findAll());
 app.get("/rest/v1/page/:id", pageController.findOne());
 app.post("/rest/v1/page/create", pageController.create());
 app.post("/rest/v1/page/update", pageController.update());
-app.post("/rest/v1/page/delete", pageController.remove());
+app.post("/rest/v1/page/delete", [permissionHandler(20)], pageController.remove());
 
 // 用户
 app.post("/rest/v1/user/register", userController.register());
