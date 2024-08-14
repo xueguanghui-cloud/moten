@@ -3,6 +3,7 @@ import { response } from "../utils/response.js";
 import { pageDao } from "../dao/index.js";
 import validate from "../middleware/validate.js";
 import _ from "lodash";
+import { opratelog } from "../middleware/opratelog.js";
 
 export class PageController {
   findAll() {
@@ -55,15 +56,16 @@ export class PageController {
       name: Joi.string().optional(),
       content: Joi.string().optional(),
     });
-    const handler = async (req, res) => {
+    const handler = async (req, res, next) => {
       const { id } = req.body;
       const pickBody = _.omit(req.body, ["id"]);
       const { status, message, result } = await pageDao.update(id, pickBody);
       if (!status) return res.json(response.fail(message));
 
       res.json(response.success(result));
+      next();
     };
-    return [validate(rules, "body"), handler];
+    return [validate(rules, "body"), handler, opratelog];
   }
   remove() {
     // 验证参数
