@@ -2,7 +2,13 @@ import cors from "cors";
 import express from "express";
 import "express-async-errors";
 import { expressjwt } from "express-jwt";
-import { pageController, userController, packageController, logController } from "./controller/index.js";
+import {
+  pageController,
+  userController,
+  packageController,
+  logController,
+  mediaController,
+} from "./controller/index.js";
 import { error404Handler, errorHandler } from "./middleware/error.js";
 import { SECRET_KEY } from "./config/index.js";
 import { authFailedHandler } from "./middleware/auth.js";
@@ -43,6 +49,9 @@ app.post("/rest/v1/user/register", userController.register());
 app.post("/rest/v1/user/login", userController.login());
 app.get("/rest/v1/user", userController.findAll());
 app.post("/rest/v1/user/disable", [permissionHandler(20)], userController.disable());
+
+// 媒体
+app.post("/rest/v1/media/upload", mediaController.upload());
 
 // 日志
 app.get("/rest/v1/log", logController.findAll());
