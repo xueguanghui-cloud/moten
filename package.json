@@ -20,6 +20,7 @@
     "ui:build": "pnpm -F @moten/ui build",
     "play:vue3": "pnpm -F @moten/ui build && pnpm -F @moten/playground-vue3 dev",
     "play:vue2": "pnpm -F @moten/ui build && pnpm -F @moten/playground-vue2 dev",
+    "serve": "pnpm -F @moten/server dev",
     "prepare": "husky",
     "lint": "node ./scripts/lint.js"
   },
