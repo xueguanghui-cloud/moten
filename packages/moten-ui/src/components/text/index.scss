@@ -1,0 +1,10 @@
+@include b('text') {
+  .text {
+    width: 100%;
+    display: block;
+    &.no-value{
+      height: 300px;
+      background-color: rgba($color: #000, $alpha: 0.05);
+    }
+  }
+}
