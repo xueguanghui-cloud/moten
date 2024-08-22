@@ -1,5 +1,6 @@
 import { type Component, defineAsyncComponent, markRaw } from 'vue'
 import { customAlphabet } from 'nanoid'
+import CryptoJS from 'crypto-js'
 
 /**
  * 随机id生成
@@ -42,4 +43,15 @@ export const batchDynamicComponents = (name: string, importUrl: Record<string, C
   if (!importComponent) return ''
 
   return markRaw(defineAsyncComponent(importComponent))
+}
+
+/**
+ * md5加密
+ * @param str 待加密的字符串
+ * @returns md5加密后的字符串
+ */
+export const md5 = (str: string) => {
+  if (!str) return ''
+  const hash = CryptoJS.MD5(str)
+  return hash.toString(CryptoJS.enc.Hex)
 }
