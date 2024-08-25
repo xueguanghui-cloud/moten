@@ -27,6 +27,7 @@
               :name="element.name"
               @copy="copy"
               @clear="clear"
+              style="transform: translateX(-50%) translateY(-10px);"
             />
           </transition>
           <component
@@ -151,7 +152,7 @@ const clear = (id: string) => {
 }
 .nested-item {
   border: 1px solid var(--color-edit-render-block-border);
-  background: var(--color-edit-render-block-bg);
+  /* background: var(--color-edi t-render-block-bg); */
   height: 100%;
   min-height: inherit;
   & + .nested-item {
