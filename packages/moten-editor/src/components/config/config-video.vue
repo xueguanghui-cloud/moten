@@ -59,38 +59,15 @@ watch(
 </script>
 
 <template>
-  <div class="config-files">
+  <div class="config-video">
     <el-form-item :label="title" :prop="key + '.' + viewport">
-      <v-upload v-model="fileList"/>
+      <v-upload v-model="fileList" type="video" />
     </el-form-item>
   </div>
 </template>
 
 <style lang="scss" scoped>
-.config-files {
-  .file,
-  .image {
-    width: 80px;
-    height: 80px;
-    box-shadow: 0 0 0 1px var(--color-border) inset;
-    border-radius: var(--border-radius);
-    background: var(--color-config-block-bg);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-  }
-  .is-error {
-    .file,
-    .image {
-      box-shadow: 0 0 0 1px var(--el-color-danger) inset;
-    }
-  }
-  .image {
-    border: 0;
-    width: 82px;
-    height: 82px;
-    object-fit: cover;
-  }
+.config-video {
+  position: relative;
 }
 </style>

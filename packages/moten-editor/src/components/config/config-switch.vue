@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { type UploadUserFile } from 'element-plus';
 import { ref, toRefs, watch } from 'vue';
 
 const props = defineProps({
@@ -18,13 +17,12 @@ const emit = defineEmits(['callback', 'update'])
 const { data } = toRefs(props)
 const { formData, key, id } = data.value
 const { title, default: defaultValue } = data.value.properties[props.viewport]
-const fileList = ref<UploadUserFile[]>([])
+const input = ref(false)
 
 watch(
   () => formData,
   (value) => {
-    const val = value?.[props.viewport] || defaultValue
-    if(val) fileList.value = [{ name: 'file', url: val }]
+    input.value = value?.[props.viewport] || defaultValue
   },
   {
     immediate: true,
@@ -32,10 +30,10 @@ watch(
 )
 
 watch(
-  fileList,
+  input,
   (value) => {
     let data = {}
-    const _value = value?.[0]?.url || ''
+    const _value = value || false
 
     if (Object.values(formData || {}).length < 2) {
       data = { desktop: _value, mobile: _value }
@@ -59,38 +57,15 @@ watch(
 </script>
 
 <template>
-  <div class="config-files">
+  <div class="config-switch">
     <el-form-item :label="title" :prop="key + '.' + viewport">
-      <v-upload v-model="fileList"/>
+      <el-switch v-model="input" />
     </el-form-item>
   </div>
 </template>
 
 <style lang="scss" scoped>
-.config-files {
-  .file,
-  .image {
-    width: 80px;
-    height: 80px;
-    box-shadow: 0 0 0 1px var(--color-border) inset;
-    border-radius: var(--border-radius);
-    background: var(--color-config-block-bg);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-  }
-  .is-error {
-    .file,
-    .image {
-      box-shadow: 0 0 0 1px var(--el-color-danger) inset;
-    }
-  }
-  .image {
-    border: 0;
-    width: 82px;
-    height: 82px;
-    object-fit: cover;
-  }
+.config-switch {
+  position: relative;
 }
 </style>
