@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { ref, watch, computed } from 'vue'
 import { useEditStore } from '@/stores/edit'
 import { batchDynamicComponents } from '@/utils/index'
 const edit = useEditStore()
@@ -26,6 +26,8 @@ const update = (params: any) => {
   })
 }
 
+const inCanvas = computed(() => edit.currentSelect?.parent === 'canvas')
+const itemCanvas = (item) => item?.properties?.[edit.viewport]?.inCanvas
 const transfer = (b, key = 'default'): void => {
   return Object.fromEntries(
     Object.entries(b.properties).map((item: any) => {
@@ -71,16 +73,21 @@ const getComponent = (item: any) => {
 <template>
   <div class="edit-config-render">
     <el-form label-width="auto" ref="ruleFormRef" :model="form" :rules="rules">
-      <div v-for="(item, index) in list" :key="index">
-        <component
-          v-if="getComponent(item)"
-          :is="getComponent(item)"
-          :data="item"
-          :viewport="edit.viewport"
-          @callback="callback"
-          @update="update"
-        />
-      </div>
+      <transition-group name="fade">
+        <div v-for="(item, index) in list" :key="index">
+          <component
+            v-if="
+              (!itemCanvas(item) && getComponent(item)) ||
+              (itemCanvas(item) && inCanvas && getComponent(item))
+            "
+            :is="getComponent(item)"
+            :data="item"
+            :viewport="edit.viewport"
+            @callback="callback"
+            @update="update"
+          />
+        </div>
+      </transition-group>
     </el-form>
   </div>
 </template>

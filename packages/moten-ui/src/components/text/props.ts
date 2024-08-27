@@ -1,10 +1,9 @@
-import { ComponentViewport } from "@/types/components";
+import { ComponentViewport } from "@/types/component";
 import { PropType } from "vue-demi";
-import { MoTextSchema } from "./schema";
 
 export type MoTextPropsData = {
   /**
-   * 文本是否在对应屏幕显示
+   * 是否在对应屏幕显示
    */
   display?: {
     desktop: string;
@@ -17,11 +16,39 @@ export type MoTextPropsData = {
     desktop: string;
     mobile: string;
   };
+  /**
+   * 宽度
+   */
+  width?: {
+    desktop: string;
+    mobile: string;
+  };
+  /**
+   * 高度
+   */
+  height?: {
+    desktop: string;
+    mobile: string;
+  };
+  /**
+   * 居左
+   */
+  top?: {
+    desktop: string;
+    mobile: string;
+  };
+  /**
+   * 居上
+   */
+  left?: {
+    desktop: string;
+    mobile: string;
+  };
 };
 
 export const props = {
   data: {
-    type: Object as PropType<MoTextSchema>,
+    type: Object as PropType<MoTextPropsData>,
     default: () => ({
       display: {
         desktop: "",
@@ -31,7 +58,27 @@ export const props = {
         desktop: "",
         mobile: "",
       },
+      width: {
+        desktop: "",
+        mobile: "",
+      },
+      height: {
+        desktop: "",
+        mobile: "",
+      },
+      top: {
+        desktop: "",
+        mobile: "",
+      },
+      left: {
+        desktop: "",
+        mobile: "",
+      },
     }),
+  },
+  parent: {
+    type: String,
+    default: "",
   },
   viewport: {
     type: String as PropType<ComponentViewport>,

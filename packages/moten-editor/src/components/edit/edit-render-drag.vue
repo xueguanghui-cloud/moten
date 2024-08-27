@@ -37,14 +37,24 @@
             :children="element.children"
             :viewport="edit.viewport"
           >
-            <template #default="{ item }">
+            <template #default="{ item, index }">
+              <edit-render-canvas
+                v-if="element.code === 'canvas'"
+                :key="element.id + '-canvas-' + index"
+                :list="item"
+                :parent="element.code"
+                class="nested-item"
+              />
               <edit-render-drag
+                v-else
+                :key="element.id + '-' + index"
                 :list="item"
                 :level="level + 1"
                 :group="group"
+                :parent="element.code"
                 class="nested-item"
                 :class="nestedClass"
-              ></edit-render-drag>
+              />
             </template>
           </component>
         </div>
@@ -52,7 +62,7 @@
           v-else
           class="block-render"
           :class="activeClass(element)"
-          @click.stop="edit.setCurrentSelect(element)"
+          @click.stop="edit.setCurrentSelect({...element, parent})"
           @mouseenter="hoverId = element.id"
           @mouseleave="hoverId = ''"
         >
@@ -69,6 +79,7 @@
             :is="renderComponentCode(element)"
             :data="element.formData"
             :viewport="edit.viewport"
+            :parent="parent"
           />
         </div>
       </div>
@@ -107,6 +118,10 @@ defineProps({
     type: Number,
     default: 1,
   },
+  parent: {
+    type: String,
+    default: ''
+  }
 })
 
 const hoverId = ref('')
@@ -146,6 +161,8 @@ const clear = (id: string) => {
 
 <style lang="scss" scoped>
 .edit-render-drag {
+  width: 100%;
+  height: 100%;
   .element {
     position: relative;
   }

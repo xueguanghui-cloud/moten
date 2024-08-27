@@ -6,70 +6,90 @@ export type MoImagePropsData = {
    * 图片是否在对应屏幕显示
    */
   display?: {
-    desktop: string
-    mobile: string
-  }
+    desktop: string;
+    mobile: string;
+  };
   /**
    * 图片地址
    */
   src?: {
-    desktop: string
-    mobile: string
-  }
+    desktop: string;
+    mobile: string;
+  };
   /**
    * 图片链接
    */
   link?: {
-    desktop: string
-    mobile: string
-  }
+    desktop: string;
+    mobile: string;
+  };
   /**
    * 图片宽度
    */
   width?: {
-    desktop: string
-    mobile: string
-  }
+    desktop: string;
+    mobile: string;
+  };
   /**
    * 图片高度
    */
   height?: {
-    desktop: string
-    mobile: string
-  }
-}
+    desktop: string;
+    mobile: string;
+  };
+  top?: {
+    desktop: string;
+    mobile: string;
+  };
+  left?: {
+    desktop: string;
+    mobile: string;
+  };
+};
 
 export const props = {
   data: {
     type: Object as PropType<MoImagePropsData>,
     default: () => ({
       display: {
-        desktop: '',
-        mobile: '',
+        desktop: "",
+        mobile: "",
       },
       src: {
-        desktop: '',
-        mobile: '',
+        desktop: "",
+        mobile: "",
       },
       link: {
-        desktop: '',
-        mobile: '',
+        desktop: "",
+        mobile: "",
       },
       width: {
-        desktop: '',
-        mobile: '',
+        desktop: "",
+        mobile: "",
       },
       height: {
-        desktop: '',
-        mobile: ''
-      }
-    })
+        desktop: "",
+        mobile: "",
+      },
+      top: {
+        desktop: "",
+        mobile: "",
+      },
+      left: {
+        desktop: "",
+        mobile: "",
+      },
+    }),
+  },
+  parent: {
+    type: String,
+    default: "",
   },
   viewport: {
     type: String as PropType<ComponentViewport>,
-    default: 'desktop',
+    default: "desktop",
     validator(val: string) {
-      return ['desktop', 'mobile'].includes(val);
-    }
-  }
-}
+      return ["desktop", "mobile"].includes(val);
+    },
+  },
+};

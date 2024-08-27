@@ -17,19 +17,22 @@
     </div>
     <div class="right">
       <el-collapse v-model="activeNames">
-        <el-collapse-item title="基础组件" name="1">
+        <el-collapse-item title="基础组件" name="1" v-show="!isCanvasCurrentSelect">
           <edit-block-drag
             :list="baseBlockList"
             :sort="false"
             :group="{ name: dragGroup, pull: 'clone', put: false }"
           />
         </el-collapse-item>
-        <el-collapse-item title="高级组件" name="2">
+        <el-collapse-item title="高级组件" name="2" v-show="!isCanvasCurrentSelect">
           <edit-block-drag
             :list="seniorBlockList"
             :sort="false"
             :group="{ name: dragGroup, pull: 'clone', put: false }"
           />
+        </el-collapse-item>
+        <el-collapse-item title="画布组件" name="3" v-show="isCanvasCurrentSelect">
+          <edit-block-canvas :list="canvasBlockList" />
         </el-collapse-item>
       </el-collapse>
     </div>
@@ -37,9 +40,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { dragGroup } from './nested'
-import { baseBlocks, seniorBlocks } from '@/config/block'
+import { baseBlocks, seniorBlocks, canvasBlocks } from '@/config/block'
+import { useEditStore } from '@/stores/edit'
+const edit = useEditStore()
 
 const menuList = ref([
   {
@@ -54,10 +59,12 @@ const menuList = ref([
   },
 ])
 const activeMenu = ref(0)
-const activeNames = ref(['1', '2'])
+const activeNames = ref(['1', '2', '3'])
 
 const baseBlockList = ref(baseBlocks)
 const seniorBlockList = ref(seniorBlocks)
+const canvasBlockList = ref(canvasBlocks)
+const isCanvasCurrentSelect = computed(()=>edit?.currentSelect?.code === 'canvas')
 </script>
 
 <style scoped lang="scss">

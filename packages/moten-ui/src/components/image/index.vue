@@ -16,8 +16,9 @@ export default defineComponent({
   },
   setup(props) {
     const platform = inject('platform')
-    const { data, viewport } = toRefs(props)
-    const classes = computed(() => [n()])
+    const { data, viewport, parent } = toRefs(props)
+    const inCanvas = computed(() => parent.value === 'canvas')
+    const classes = computed(() => [n(), { 'in-canvas': inCanvas.value, 'platform-user': platform === 'user' }])
     const display = computed(() => {
       const display = data.value?.display?.[viewport.value]
       return typeof display === 'boolean' ? display : true
@@ -26,7 +27,15 @@ export default defineComponent({
     const link = computed(() => data.value?.link?.[viewport.value] || '')
     const width = computed(() => data.value?.width?.[viewport.value] || '')
     const height = computed(() => data.value?.height?.[viewport.value] || '')
+    const top = computed(() => data.value?.top?.[viewport.value] || '')
+    const left = computed(() => data.value?.left?.[viewport.value] || '')
     const styles = computed(() => ({ width: width.value, height: height.value }))
+    const positionStyle = computed(() => {
+      if(platform !== 'editor') {
+        return { top: top.value, left: left.value }
+      }
+      return
+    })
     const displayStyle = computed(()=>{
       if (platform === 'editor') {
         return !display.value ? { opacity: 0.4, filter: 'brightness(0.7)' } : {}
@@ -43,14 +52,15 @@ export default defineComponent({
       link,
       width,
       height,
-      displayStyle
+      displayStyle,
+      positionStyle
     }
   },
 });
 </script>
 
 <template>
-  <div :class="classes" :style="displayStyle">
+  <div :class="classes" :style="[displayStyle, positionStyle]">
     <MoLink v-if="src" :to="link" target="_blank">
       <img v-bind="$attrs" :src="src" class="image" :style="styles">
     </MoLink>

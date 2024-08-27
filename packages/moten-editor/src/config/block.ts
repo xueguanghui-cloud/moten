@@ -84,6 +84,7 @@ export const canvasBlocks: BaseBlock[] = [
     code: 'image',
     icon: 'image',
     formData: {},
+    parent: 'canvas',
   },
   {
     id: '',
@@ -91,5 +92,6 @@ export const canvasBlocks: BaseBlock[] = [
     code: 'text',
     icon: 'text',
     formData: {},
+    parent: 'canvas',
   },
 ]

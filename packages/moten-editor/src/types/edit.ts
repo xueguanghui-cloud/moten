@@ -31,4 +31,8 @@ export interface BaseBlock {
    * 配置内容
    */
   formData?: Partial<BlockSchemaFormData[keyof BlockSchemaFormData]>
+  /**
+   * 父组件code
+   */
+  parent?: String
 }
