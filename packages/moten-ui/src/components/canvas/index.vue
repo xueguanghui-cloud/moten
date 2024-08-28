@@ -7,49 +7,55 @@
 </template>
 
 <script lang="ts">
-import { createNameSpace } from '@/utils/components'
-import { computed, defineComponent, toRefs, inject } from 'vue-demi'
-import { props } from './props'
+import { createNameSpace } from "@/utils/components";
+import { props } from "./props";
 
-const { name, n } = createNameSpace('canvas')
+const { name, n } = createNameSpace("canvas");
 
-export default defineComponent({
+export default {
   name,
   props,
-  setup(props) {
-    const platform = inject('platform')
-    const { data, viewport, children } = toRefs(props)
-
-    const classes = computed(() => [n()])
-    const itemComputed = computed(() => children.value[0] || [])
-    const display = computed(() => {
-      const display = data.value?.display?.[viewport.value]
-      return typeof display === 'boolean' ? display : true
-    })
-    const background = computed(() => data.value?.background?.[viewport.value] || '')
-    const styles = computed(() => ({ background: background.value }))
-    const height = computed(() => data.value?.height?.[viewport.value] || '')
-    const itemStyles = computed(()=>[{ height: height.value }])
-    const displayStyle = computed(() => {
-      if(platform === 'editor') {
-        return !display.value ? { opacity: 0.4, filter: 'brightness(0.7)' } : {}
-      }else {
-        return !display.value ? { display: 'none' } : {}
-      }
-    })
-
+  data() {
     return {
-      classes,
-      itemComputed,
-      background,
-      styles,
-      displayStyle,
-      itemStyles
-    }
+      platform: localStorage.getItem("$platform") || "user",
+    };
   },
-})
+  computed: {
+    classes() {
+      return [n()];
+    },
+    itemComputed() {
+      console.log("this.children", this.children);
+
+      return this.children[0] || [];
+    },
+    display() {
+      const display = this.data?.display?.[this.viewport];
+      return typeof display === "boolean" ? display : true;
+    },
+    background() {
+      return this.data?.background?.[this.viewport] || "";
+    },
+    styles() {
+      return { background: this.background };
+    },
+    height() {
+      return this.data?.height?.[this.viewport] || "";
+    },
+    itemStyles() {
+      return [{ height: this.height }];
+    },
+    displayStyle() {
+      if (this.platform === "editor") {
+        return !this.display ? { opacity: 0.4, filter: "brightness(0.7)" } : {};
+      } else {
+        return !this.display ? { display: "none" } : {};
+      }
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
-@import './index.scss';
+@import "./index.scss";
 </style>

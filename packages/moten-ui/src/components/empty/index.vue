@@ -1,25 +1,24 @@
 <script lang="ts">
-import { props } from './props'
-import { defineComponent, computed, toRefs } from "vue";
-import { createNameSpace } from "@/utils/components"
-import noDataIcon from '@/assets/images/no-data.png'
+import { props } from "./props";
+import { createNameSpace } from "@/utils/components";
+import noDataIcon from "@/assets/images/no-data.png";
 
-const { name, n } = createNameSpace('empty')
+const { name, n } = createNameSpace("empty");
 
-export default defineComponent({
+export default {
   name,
   props,
-  setup(props) {
-    const { image, description } = toRefs(props)
-    const classes = computed(() => [n()])
-    const src = computed(() => image.value || noDataIcon)
+  data() {
     return {
-      classes,
-      src,
-      description
-    }
+      classes: [n()],
+    };
   },
-});
+  computed: {
+    src() {
+      return this.image || noDataIcon;
+    },
+  },
+};
 </script>
 
 <template>
@@ -30,5 +29,5 @@ export default defineComponent({
 </template>
 
 <style lang="scss" scoped>
-@import './index.scss';
+@import "./index.scss";
 </style>

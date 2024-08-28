@@ -1,31 +1,27 @@
 <script lang="ts">
-import { props } from './props'
-import { defineComponent, computed, toRefs } from "vue-demi";
-import { createNameSpace } from "@/utils/components"
+import { props } from "./props";
+import { createNameSpace } from "@/utils/components";
 
-const { name, n } = createNameSpace('link')
+const { name, n } = createNameSpace("link");
 
-export default defineComponent({
+export default {
   name,
   props,
-  setup(props) {
-    const { to, target } = toRefs(props)
-    const classes = computed(() => [n()])
-    const isExternalLink = computed(() => {
-      return to.value.match(/^(http:\/\/|https:\/\/|javascript:.*|tel:.*|mailto:.*)/)
-    })
-    const tag = computed(() => {
-      if (to.value) return 'span'
-      return isExternalLink.value ? 'a' : 'router-link'
-    })
+  data() {
     return {
-      classes,
-      tag,
-      target,
-      to,
-    }
+      classes: [n()],
+    };
   },
-});
+  computed: {
+    isExternalLink() {
+      return this.to.match(/^(http:\/\/|https:\/\/|javascript:.*|tel:.*|mailto:.*)/);
+    },
+    tag() {
+      if (!this.to) return "span";
+      return this.isExternalLink ? "a" : "router-link";
+    },
+  },
+};
 </script>
 
 <template>
@@ -35,5 +31,5 @@ export default defineComponent({
 </template>
 
 <style lang="scss" scoped>
-@import './index.scss';
+@import "./index.scss";
 </style>

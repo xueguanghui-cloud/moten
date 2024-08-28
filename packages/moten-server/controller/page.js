@@ -30,10 +30,11 @@ export class PageController {
       const { id } = req.params;
       const { status, message, result } = await pageDao.findOne(id);
       if (!status) return res.json(response.fail(message));
+      const [resultFirst] = result;
 
-      res.json(response.success(result));
+      res.json(response.success(resultFirst));
     };
-    return [validate(rules), handler];
+    return [validate(rules, "params"), handler];
   }
   create() {
     // 验证参数

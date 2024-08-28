@@ -11,7 +11,7 @@
       <v-select v-model="viewport" />
     </div>
     <div class="header-right">
-      <el-button>
+      <el-button @click="preview">
         <v-icon icon="preview" />
         预览
       </el-button>
@@ -138,6 +138,13 @@ const create = async (formEl: FormInstance | undefined) => {
     ElMessage.success('发布成功！')
     router.go(-1)
   })
+}
+
+const preview = () => {
+  window.open(
+    'http://localhost:5173/#/?content=' + encodeURIComponent(JSON.stringify({ block: edit.blockConfig, page: edit.pageConfig })),
+    '_blank'
+  )
 }
 </script>
 

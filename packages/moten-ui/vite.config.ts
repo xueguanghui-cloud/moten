@@ -5,14 +5,14 @@ import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
 import { createVuePlugin } from "vite-plugin-vue2";
 import { resolve } from "path";
-import { isVue2 } from "vue-demi";
+import { isVue2, isVue3 } from "vue-demi";
 import dts from "vite-plugin-dts";
 
 const name = isVue2 ? "vue2" : "vue3";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [isVue2 ? createVuePlugin() : vue(), dts()],
+  plugins: [isVue2 ? createVuePlugin() : vue(), isVue3 && dts()],
   build: {
     outDir: `dist/${name}`,
     lib: {
@@ -41,15 +41,15 @@ export default defineConfig({
     preprocessorOptions: {
       // 配置 mixin.scss 混合文件的全局引入
       scss: {
-        additionalData: `@import "@//assets/style/resources.scss";`,
+        additionalData: `@import "@/assets/style/resources.scss";`,
       },
     },
   },
   test: {
-    environment: 'jsdom',
+    environment: "jsdom",
     coverage: {
-      include: ['src/components/**/*'],
-      exclude: ['src/**/schema.ts'],
+      include: ["src/components/**/*"],
+      exclude: ["src/**/schema.ts"],
     },
   },
 });

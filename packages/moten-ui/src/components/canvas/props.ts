@@ -6,8 +6,8 @@ export type MoCanvasPropsData = {
    * 屏幕信息
    */
   display?: {
-    desktop: number[];
-    mobile: number[];
+    desktop: string;
+    mobile: string;
   };
   /**
    * 背景

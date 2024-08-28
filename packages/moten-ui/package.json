@@ -44,6 +44,7 @@
   },
   "dependencies": {
     "@sinclair/typebox": "^0.32.32",
+    "@vueup/vue-quill": "^1.2.0",
     "vue": "^3.4.21",
     "vue-demi": "^0.14.8",
     "vue2": "npm:vue@~2.6.14",

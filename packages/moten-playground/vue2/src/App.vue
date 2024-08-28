@@ -1,19 +1,23 @@
 <template>
   <div id="app">
-    <MoImage src="https://vitejs.dev/logo-with-shadow.png" />
+    <MoImage :data="data" />
   </div>
 </template>
 
 <script>
-import moten from '@moten/ui/vue2'
-const {MoImage} = moten
-
 export default {
-  name: 'App',
-  components: {
-    MoImage
-  }
-}
+  name: "App",
+  data() {
+    return {
+      data: {
+        src: {
+          desktop: "https://vitejs.dev/logo-with-shadow.png",
+          mobile: "https://vitejs.dev/logo-with-shadow.png",
+        },
+      },
+    };
+  },
+};
 </script>
 
 <style>

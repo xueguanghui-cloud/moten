@@ -1,45 +1,52 @@
 <template>
   <div :class="classes" :style="styles">
     <div class="item" v-for="(item, index) in cols" :key="index" :style="itemStyle(item)">
-      <slot :item="itemComputed(index)" :index="index"></slot>
+      <slot :item="itemComputed(index)"></slot>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { createNameSpace } from '@/utils/components'
-import { computed, defineComponent, toRefs } from 'vue-demi'
-import { props } from './props'
+import { createNameSpace } from "@/utils/components";
+import { props } from "./props";
 
-const { name, n } = createNameSpace('column')
+const { name, n } = createNameSpace("column");
 
-export default defineComponent({
+export default {
   name,
   props,
-  setup(props) {
-    const { data, viewport, children } = toRefs(props)
-
-    const classes = computed(() => [n()])
-    const itemComputed = computed(() => (index: number) => children.value?.[index] || [])
-    const cols = computed(() => data.value?.cols?.[viewport.value] || [0.5, 0.5])
-    const background = computed(() => data.value?.background?.[viewport.value] || '')
-    const styles = computed(() => ({ background: background.value }))
-    const itemStyle = computed(() => (item: number | string) => ({
-      width: Number(item) * 100 + '%',
-    }))
-
+  data() {
     return {
-      classes,
-      itemComputed,
-      cols,
-      background,
-      styles,
-      itemStyle,
-    }
+      // 如果需要的话，可以在这里添加响应式数据
+    };
   },
-})
+  computed: {
+    classes() {
+      return [n()];
+    },
+    itemComputed() {
+      return (index: number) => this.children?.[index] || [];
+    },
+    cols() {
+      return this.data?.cols?.[this.viewport] || [0.5, 0.5];
+    },
+    background() {
+      return this.data?.background?.[this.viewport] || "";
+    },
+    styles() {
+      return { background: this.background };
+    },
+  },
+  methods: {
+    itemStyle(item: string | number) {
+      return {
+        width: Number(item) * 100 + "%",
+      };
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
-@import './index.scss';
+@import "./index.scss";
 </style>

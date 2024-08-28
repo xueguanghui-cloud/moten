@@ -36,6 +36,7 @@ ex("pnpm ui", (msg) => {
   if (!firstUIBuild) return; // 如果不是第一次构建，则不执行
   if (msg.startsWith("\u001b[36mbuilt in") || msg.startsWith("built in")) {
     ex("pnpm editor");
+    ex("pnpm preview:vue3");
     firstUIBuild = false;
   }
 });

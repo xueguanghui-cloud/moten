@@ -1,5 +1,7 @@
 import { App } from "vue-demi";
 import { TSchema, Type } from "@sinclair/typebox";
+import { COMPONENT_PREFIX } from "../config";
+import { BaseBlock } from "@/types/components";
 
 /**
  * schema加上视口
@@ -36,12 +38,16 @@ export function createNameSpaceFn(prefix: string) {
     const componentName = `${prefix}-${name}`;
 
     const createBEM = (suffix?: string) => {
-      if(!suffix) return componentName;
-      return suffix.startsWith('--') ? `${componentName}${suffix}` : `${componentName}__${suffix}`
-    }
+      if (!suffix) return componentName;
+      return suffix.startsWith("--") ? `${componentName}${suffix}` : `${componentName}__${suffix}`;
+    };
 
-    return {name:componentName, n: createBEM }
+    return { name: componentName, n: createBEM };
   };
 }
 
-export const createNameSpace = createNameSpaceFn('mo')
+export const createNameSpace = createNameSpaceFn("mo");
+
+export const renderComponentCode = (element: BaseBlock) => {
+  return `${COMPONENT_PREFIX}-${element.code}`;
+};
