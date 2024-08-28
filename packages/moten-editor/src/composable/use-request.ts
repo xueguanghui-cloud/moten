@@ -1,6 +1,7 @@
 import router from '@/router'
 import axios, { type AxiosRequestConfig } from 'axios'
 import { useUserStore } from '@/stores/user'
+import { ElMessage } from 'element-plus'
 
 const userStore = useUserStore()
 
@@ -31,6 +32,9 @@ axiosInstance.interceptors.response.use(
     }
     if (response.data?.code === 200) {
       response.data['status'] = true
+    }
+    if (!response.data['status']) {
+      ElMessage.error(response.data.message)
     }
     // 响应处理
     return response

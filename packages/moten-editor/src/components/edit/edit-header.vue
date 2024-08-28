@@ -20,17 +20,36 @@
         发布
       </el-button>
     </div>
+    <el-dialog v-model="dialogFormVisible" title="页面发布" width="500">
+      <el-form ref="ruleFormRef" :model="form" :rules="rules">
+        <el-form-item label="页面名" label-width="83px" prop="name">
+          <el-input v-model="form.name" autocomplete="off" placeholder="请输入页面名称" />
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button @click="dialogFormVisible = false">取消</el-button>
+          <el-button type="primary" @click="create(ruleFormRef)">取消</el-button>
+        </div>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
 <script setup lang="ts">
 import { type Viewport } from '@/types/edit'
-import { ref, watch, nextTick } from 'vue'
+import { ref, watch, nextTick, reactive } from 'vue'
 import { useEditStore } from '@/stores/edit'
 import Ajv from 'ajv'
 import AjvErrors from 'ajv-errors'
 import { blockSchema, type BlockSchemaKeys } from '@/config/schema'
 import { findNodeById } from './nested'
+import { createPageAsync } from '@/api/page'
+import { ElMessage } from 'element-plus'
+import { useRouter } from 'vue-router'
+import type { FormInstance } from 'element-plus'
+
+const router = useRouter()
 
 const ajv = new Ajv({ allErrors: true })
 ajv.addKeyword({
@@ -41,6 +60,15 @@ AjvErrors(ajv)
 const edit = useEditStore()
 const viewport = ref<Viewport>('desktop')
 
+const dialogFormVisible = ref(false)
+const ruleFormRef = ref<FormInstance>()
+const form = reactive({
+  name: '',
+})
+const rules = reactive({
+  name: [{ required: true, message: '请输入页面名称', trigger: 'blur' }],
+})
+
 watch(
   () => viewport.value,
   (val) => {
@@ -50,7 +78,7 @@ watch(
   },
 )
 
-const validateAll = async (item: any) => {
+const validateAll = (item: any) => {
   const { value, schema, id } = item
   const validate = ajv.compile(schema)
   const valid = validate(value)
@@ -61,18 +89,18 @@ const validateAll = async (item: any) => {
 
       viewport.value = pathViewport as Viewport
 
-      await nextTick()
-
-      edit.setViewport(pathViewport as Viewport)
-      edit.setConfigPanelShow(true)
-      findNodeById(edit.blockConfig, id, (params) => {
-        const { node } = params
-        edit.setCurrentSelect(node)
-      })
+      setTimeout(() => {
+        edit.setViewport(pathViewport as Viewport)
+      }, 0)
     }
+    edit.setConfigPanelShow(true)
+    findNodeById(edit.blockConfig, id, (params) => {
+      const { node } = params
+      edit.setCurrentSelect(node)
+    })
 
     console.warn('ajv error: ', id, validate.errors?.[0].instancePath, validate.errors?.[0].message)
-    return
+    return true
   }
   console.warn('ajv submit!')
 }
@@ -85,8 +113,30 @@ const submit = () => {
       schema: blockSchema[item.code as BlockSchemaKeys],
     }
   })
-  list.forEach((item) => {
-    validateAll(item)
+  const hasError = list.some((item) => validateAll(item))
+  if (hasError) return
+  dialogFormVisible.value = true
+}
+
+const create = async (formEl: FormInstance | undefined) => {
+  if (!formEl) return
+
+  await formEl.validate(async (valid, fields) => {
+    if (!valid) {
+      console.log('error submit', fields)
+      return
+    }
+    const { status } = await createPageAsync({
+      name: form.name,
+      content: JSON.stringify({ block: edit.blockConfig, page: edit.pageConfig }),
+    })
+    if (!status) {
+      dialogFormVisible.value = false
+      return
+    }
+    dialogFormVisible.value = false
+    ElMessage.success('发布成功！')
+    router.go(-1)
   })
 }
 </script>

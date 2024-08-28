@@ -23,7 +23,7 @@ export class PackageController {
   findOne() {
     // 验证参数
     const rules = Joi.object({
-      id: Joi.number().optional(),
+      id: Joi.number().required(),
     });
     const handler = async (req, res) => {
       const { id } = req.params;

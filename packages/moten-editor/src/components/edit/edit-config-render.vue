@@ -40,6 +40,7 @@ const transfer = (b, key = 'default'): void => {
 const rules = ref(transfer(props.schema, 'rules'))
 
 const submitForm = () => {
+  // 延迟200ms，是为了让左侧配置框弹出后再进行校验
   setTimeout(() => {
     if (!ruleFormRef.value) return
     ruleFormRef.value.validate((valid: any, fields: any) => {
@@ -49,7 +50,7 @@ const submitForm = () => {
       // }
       // console.warn('form error !', fields)
     })
-  }, 100)
+  }, 200)
 }
 
 submitForm()
